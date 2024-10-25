@@ -27,6 +27,12 @@ use think\route\Dispatch;
 class Controller extends Dispatch
 {
     /**
+     * 控制器分级
+     * @var string
+     */
+    protected $layer;
+
+    /**
      * 控制器名
      * @var string
      */
@@ -71,11 +77,12 @@ class Controller extends Dispatch
         }
 
         $this->actionName = strip_tags($action);
-        $this->controller = strip_tags(($layer ? $layer . '.' : '') . $controller);
+        $this->controller = strip_tags($controller);
+        $this->layer      = strip_tags($layer);
 
         // 设置当前请求的控制器、操作
         $this->request
-            ->setLayer(strip_tags($layer))
+            ->setLayer($this->layer)
             ->setController($this->controller)
             ->setAction($this->actionName);
     }
@@ -84,7 +91,8 @@ class Controller extends Dispatch
     {
         try {
             // 实例化控制器
-            $instance = $this->controller($this->controller);
+            $controller = ($this->layer ? $this->layer . '.' : '') . $this->controller;
+            $instance = $this->controller($controller);
         } catch (ClassNotFoundException $e) {
             throw new HttpException(404, 'controller not exists:' . $e->getClass());
         }
