@@ -40,6 +40,12 @@ use think\initializer\RegisterService;
 class App extends Container
 {
     /**
+     * 核心框架版本 
+     * @deprecated 已经废弃 请改用version()方法
+     */    
+    const VERSION = '8.0.0';
+
+    /**
      * 应用调试模式
      * @var bool
      */
