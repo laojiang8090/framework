@@ -57,7 +57,7 @@ class Controller extends Dispatch
 
             if (isset($alias[$layer])) {
                 $middleware = $alias[$layer];
-                $this->app->middleware->add($layer, 'route');
+                $this->app->middleware->add($middleware, 'route');
             }
         }
 
