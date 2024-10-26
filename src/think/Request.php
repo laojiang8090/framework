@@ -1911,7 +1911,7 @@ class Request implements ArrayAccess
     {
         $name = $this->controller ?: '';
         if ($base) {
-            $name = basename($name);
+            $name = basename(str_replace('.', '/', $name));
         }
         return $convert ? strtolower($name) : $name;
     }

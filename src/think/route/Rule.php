@@ -692,6 +692,7 @@ abstract class Rule
         $extraParams = true;
         $search      = $replace      = [];
         $depr        = $this->config('pathinfo_depr');
+
         foreach ($matches as $key => $value) {
             $search[]  = '<' . $key . '>';
             $replace[] = $value;

@@ -47,7 +47,7 @@ class Url
     /**
      * 架构函数
      * @access public
-     * @param  Route  $route URL地址
+     * @param  Route  $route 路由对象
      * @param  App    $app App对象
      * @param  string $url URL地址
      * @param  array  $vars 参数
@@ -216,15 +216,22 @@ class Url
             // 解析到控制器
             $url = substr($url, 1);
         } elseif ('' === $url) {
-            $url = $request->controller() . '/' . $request->action();
+            $url  = $request->controller() . '/' . $request->action();
+            $auto = $this->route->getName('__think_auto_route__');
+            if (!empty($auto)) {
+                $url = $request->layer() . '/' . $url;
+            }
         } else {
             $controller = $request->controller();
-
             $path       = explode('/', $url);
             $action     = array_pop($path);
             $controller = empty($path) ? $controller : array_pop($path);
-
-            $url = $controller . '/' . $action;
+            $url        = $controller . '/' . $action;
+            $auto       = $this->route->getName('__think_auto_route__');
+            if (!empty($auto)) {
+                $module = empty($path) ? $request->layer() : array_pop($path);
+                $url    = $module . '/' . $url;
+            }
         }
 
         return $url;

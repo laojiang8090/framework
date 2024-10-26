@@ -773,6 +773,7 @@ class Route
     public function auto(string $rule = '[:module]/[:controller]/[:action]', $route = ':module/:controller/:action', bool $middleware = false): RuleItem
     {
         return $this->rule($rule, $route)
+            ->name('__think_auto_route__')
             ->pattern([
                 'module'     => '[A-Za-z0-9\.\_]+',
                 'controller' => '[A-Za-z0-9\.\_]+',
