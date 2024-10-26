@@ -884,7 +884,7 @@ class Request implements ArrayAccess
             };
 
             // 当前请求参数和URL地址中的参数合并
-            $this->param = array_merge($this->param, $this->route(false), $this->get(false), $vars);
+            $this->param = array_merge($this->param, $this->get(false), $vars);
 
             $this->mergeParam = true;
         }
@@ -1904,11 +1904,15 @@ class Request implements ArrayAccess
      * 获取当前的控制器名
      * @access public
      * @param  bool $convert 转换为小写
+     * @param  bool $base    仅返回basename
      * @return string
      */
-    public function controller(bool $convert = false): string
+    public function controller(bool $convert = false, bool $base = false): string
     {
         $name = $this->controller ?: '';
+        if ($base) {
+            $name = basename($name);
+        }
         return $convert ? strtolower($name) : $name;
     }
 
