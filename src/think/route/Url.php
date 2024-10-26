@@ -216,11 +216,7 @@ class Url
             // 解析到控制器
             $url = substr($url, 1);
         } elseif ('' === $url) {
-            $url  = $request->controller() . '/' . $request->action();
-            $auto = $this->route->getName('__think_auto_route__');
-            if (!empty($auto)) {
-                $url = $request->layer() . '/' . $url;
-            }
+            $url  = $request->pathinfo();
         } else {
             $controller = $request->controller();
             $path       = explode('/', $url);
