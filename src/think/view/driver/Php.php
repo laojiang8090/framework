@@ -132,8 +132,7 @@ class Php implements TemplateHandlerInterface
 
         if (!str_starts_with($template, '/')) {
             $template   = str_replace(['/', ':'], $depr, $template);
-            $layer      = $request->layer();
-            $controller = ($layer ? $layer . '.' : '') . $request->controller();
+            $controller = $request->controller();
             if (str_contains($controller, '.')) {
                 $pos        = strrpos($controller, '.');
                 $controller = substr($controller, 0, $pos) . '.' . Str::snake(substr($controller, $pos + 1));
