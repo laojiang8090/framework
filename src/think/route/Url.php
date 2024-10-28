@@ -209,12 +209,6 @@ class Url
         if (str_starts_with($url, '/')) {
             // 直接作为路由地址解析
             $url = substr($url, 1);
-        } elseif (str_contains($url, '\\')) {
-            // 解析到类
-            $url = ltrim(str_replace('\\', '/', $url), '/');
-        } elseif (str_starts_with($url, '@')) {
-            // 解析到控制器
-            $url = substr($url, 1);
         } elseif ('' === $url) {
             $url  = $request->pathinfo();
         } else {
@@ -222,9 +216,9 @@ class Url
             $path       = explode('/', $url);
             $action     = array_pop($path);
             $controller = empty($path) ? $controller : array_pop($path);
-            $url        = $controller . '/' . $action;
+            $url        = str_replace('.', '/', $controller) . '/' . $action;
             $auto       = $this->route->getName('__think_auto_route__');
-            if (!empty($auto)) {
+            if (!empty($auto) && !strpos($controller,'.')) {
                 $module = empty($path) ? $request->layer() : array_pop($path);
                 $url    = $module . '/' . $url;
             }
