@@ -770,18 +770,18 @@ class Route
      * @param  bool   $middleware  自动注册中间件
      * @return RuleItem
      */
-    public function auto(string $rule = '[:module]/[:controller]/[:action]', $route = ':module/:controller/:action', bool $middleware = false): RuleItem
+    public function auto(string $rule = '[:__module__]/[:__controller__]/[:__action__]', $route = ':__module__/:__controller__/:__action__', bool $middleware = false): RuleItem
     {
         return $this->rule($rule, $route)
             ->name('__think_auto_route__')
             ->pattern([
-                'module'     => '[A-Za-z0-9\.\_]+',
-                'controller' => '[A-Za-z0-9\.\_]+',
-                'action'     => '[A-Za-z0-9\_]+',
+                '__module__'     => '[A-Za-z0-9\.\_]+',
+                '__controller__' => '[A-Za-z0-9\.\_]+',
+                '__action__'     => '[A-Za-z0-9\_]+',
             ])->default([
-                'module'     => $this->config['default_module'],
-                'controller' => $this->config['default_controller'],
-                'action'     => $this->config['default_action'],
+                '__module__'     => $this->config['default_module'],
+                '__controller__' => $this->config['default_controller'],
+                '__action__'     => $this->config['default_action'],
             ])->autoMiddleware($middleware);
     }
 

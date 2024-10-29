@@ -724,6 +724,8 @@ abstract class Rule
                     'float'      => (float) $val,
                     default      => $val,
                 };
+            } elseif (in_array($key, ['__module__','__controller__','__action__'])) {
+                unset($matches[$key]);
             }
         }
 
