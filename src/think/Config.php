@@ -146,32 +146,22 @@ class Config
         if (!str_contains($name, '.')) {
             $name   = strtolower($name);
             $result = $this->pull($name);
-            if ($this->hook) {
-                return $this->lazy($name, $result, []);
-            }
-            return $result;
+            return $this->hook ? $this->lazy($name, $result, []) : $result;
         }
 
         $item    = explode('.', $name);
         $item[0] = strtolower($item[0]);
         $config  = $this->config;
 
-        // 按.拆分成多维数组进行判断
         foreach ($item as $val) {
             if (isset($config[$val])) {
                 $config = $config[$val];
-            } elseif ($this->hook) {
-                return $this->lazy($name, null, $default);
             } else {
-                return $default;
+                return $this->hook ? $this->lazy($name, null, $default) : $default;
             }
         }
 
-        if ($this->hook) {
-            return $this->lazy($name, $config, $default);
-        }
-
-        return $config;
+        return $this->hook ? $this->lazy($name, $config, $default) : $config;
     }
 
     /**
