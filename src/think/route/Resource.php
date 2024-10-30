@@ -139,6 +139,9 @@ class Resource extends RuleGroup
         }
 
         if ($this->extend) {
+            // 扩展路由规则
+            $group = new RuleGroup($this->router, $this, $prefix . '/<id>');
+            $this->router->setGroup($group);
             Container::getInstance()->invokeFunction($this->extend);
         }
 
