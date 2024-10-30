@@ -115,8 +115,6 @@ class Config
      */
     protected function pull(string $name): array
     {
-        $name = strtolower($name);
-
         return $this->config[$name] ?? [];
     }
 
@@ -146,7 +144,12 @@ class Config
         }
 
         if (!str_contains($name, '.')) {
-            return $this->pull($name);
+            $name   = strtolower($name);
+            $result = $this->pull($name);
+            if ($this->hook) {
+                return $this->lazy($name, $result, []);
+            }
+            return $result;
         }
 
         $item    = explode('.', $name);
