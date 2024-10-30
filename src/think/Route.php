@@ -577,11 +577,12 @@ class Route
      * @access public
      * @param string $rule  路由规则
      * @param string $route 路由地址
+     * @param Closure $extend 扩展规则
      * @return Resource|ResourceRegister
      */
-    public function resource(string $rule, string $route)
+    public function resource(string $rule, string $route, ?Closure $extend = null)
     {
-        $resource = new Resource($this, $this->group, $rule, $route, $this->rest);
+        $resource = (new Resource($this, $this->group, $rule, $route, $this->rest))->extend($extend);
 
         if (!$this->lazy) {
             return new ResourceRegister($resource);

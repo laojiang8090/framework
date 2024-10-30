@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace think\route;
 
+use Closure;
+use think\Container;
 use think\Route;
 
 /**
@@ -44,6 +46,12 @@ class Resource extends RuleGroup
     protected $middleware = [];
 
     /**
+     * 扩展规则
+     * @var Closure
+     */
+    protected $extend;
+
+    /**
      * 架构函数
      * @access public
      * @param  Route         $router     路由对象
@@ -72,6 +80,12 @@ class Resource extends RuleGroup
             $this->domain = $this->parent->getDomain();
             $this->parent->addRuleItem($this);
         }
+    }
+
+    public function extend(Closure $extend)
+    {
+        $this->extend = $extend;
+        return $this;
     }
 
     /**
@@ -122,6 +136,10 @@ class Resource extends RuleGroup
                     call_user_func_array([$ruleItem, $name], (array) $this->$name[$key]);
                 }
             }
+        }
+
+        if ($this->extend) {
+            Container::getInstance()->invokeFunction($this->extend);
         }
 
         $this->router->setGroup($origin);
