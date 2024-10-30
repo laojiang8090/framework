@@ -82,7 +82,7 @@ class Resource extends RuleGroup
         }
     }
 
-    public function extend(Closure $extend)
+    public function extend(?Closure $extend)
     {
         $this->extend = $extend;
         return $this;
