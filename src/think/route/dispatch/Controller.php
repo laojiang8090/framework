@@ -99,7 +99,7 @@ class Controller extends Dispatch
                 $action = $this->actionName . $suffix;
 
                 if (is_callable([$instance, $action])) {
-                    $vars = array_merge($this->request->get(), $this->param);
+                    $vars = $this->getActionBindVars();
                     try {
                         $reflect = new ReflectionMethod($instance, $action);
                         // 严格获取当前操作方法名

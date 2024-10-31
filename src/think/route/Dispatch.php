@@ -119,6 +119,21 @@ abstract class Dispatch
     }
 
     /**
+     * 获取操作的绑定参数
+     * @access protected
+     * @return array
+     */
+    protected function getActionBindVars(): array
+    {
+        $bind = $this->rule->config('action_bind_param');
+        return match ($bind) {
+            'route' => $this->param,
+            'param' => $this->request->param(),
+            default => array_merge($this->request->get(), $this->param),
+        };
+    }
+
+    /**
      * 路由绑定模型实例
      * @access protected
      * @param array $bindModel 绑定模型
