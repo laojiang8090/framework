@@ -82,6 +82,12 @@ class Resource extends RuleGroup
         }
     }
 
+    /**
+     * 扩展额外路由规则
+     * @access public
+     * @param  Closure $extend 路由规则闭包定义
+     * @return $this
+     */
     public function extend(?Closure $extend)
     {
         $this->extend = $extend;
