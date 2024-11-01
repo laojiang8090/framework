@@ -235,10 +235,10 @@ abstract class Driver implements CacheHandlerInterface
      * @param mixed $data 缓存数据
      * @return string
      */
-    protected function serialize($data): string
+    protected function serialize($data)
     {
         if (is_numeric($data)) {
-            return (string) $data;
+            return $data;
         }
 
         $serialize = $this->options['serialize'][0] ?? "serialize";
@@ -252,7 +252,7 @@ abstract class Driver implements CacheHandlerInterface
      * @param string $data 缓存数据
      * @return mixed
      */
-    protected function unserialize(string $data)
+    protected function unserialize($data)
     {
         if (is_numeric($data)) {
             return $data;
