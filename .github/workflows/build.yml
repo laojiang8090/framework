@@ -3,7 +3,7 @@ name: build
 on:
   push:
     branches:
-      - "8.0"
+      - "8.x"
   pull_request:
   schedule:
     - cron: "0 0 * * *"

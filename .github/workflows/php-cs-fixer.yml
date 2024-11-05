@@ -3,7 +3,7 @@ name: PHP CS Fixer
 on:
   pull_request:
     branches:
-      - "8.0"
+      - "8.x"
     paths:
       - '**.php'
 
