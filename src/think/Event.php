@@ -64,7 +64,7 @@ class Event
      * @param string $observer 观察者定义
      * @return $this
      */
-    public function observer(string|array $name, string $observer)
+    public function observer(string|array $name, ?string $observer = null)
     {
         if (is_array($name)) {
             $this->observer = array_merge($this->observer, $name);
