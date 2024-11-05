@@ -992,8 +992,11 @@ class Request implements ArrayAccess
      * @param  mixed $default 默认值
      * @return mixed
      */
-    public function middleware(string $name, $default = null)
+    public function middleware(?string $name = null, $default = null)
     {
+        if (is_null($name)) {
+            return $this->middleware;
+        }
         return $this->middleware[$name] ?? $default;
     }
 
