@@ -393,9 +393,9 @@ class RuleGroup extends Rule
     }
 
     /**
-     * 分组自动URL调度
+     * 分组自动URL调度  默认绑定到当前分组名所在的控制器分级
      * @access public
-     * @param  string       $bind 绑定资源
+     * @param  string       $bind 绑定资源 绑定规则 class @controller :namespace /layer
      * @param  string|array $middleware 中间件
      * @return $this
      */
@@ -410,25 +410,12 @@ class RuleGroup extends Rule
     }
 
     /**
-     * 分组绑定 默认绑定到当前分组名所在的控制器分级
-     * 绑定规则 class @controller :namespace /layer
-     * @access public
-     * @param  string $bind 绑定资源
-     * @return $this
-     */
-    public function bind(string $bind)
-    {
-        $this->bind = $bind;
-        return $this;
-    }
-
-    /**
      * 分组绑定到类
      * @access public
      * @param  string $class
      * @return $this
      */
-    public function class (string $class)
+    public function class(string $class)
     {
         $this->bind = '\\' . $class;
         return $this;
