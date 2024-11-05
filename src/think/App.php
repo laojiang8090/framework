@@ -611,6 +611,10 @@ class App extends Container
         if (isset($event['subscribe'])) {
             $this->event->subscribe($event['subscribe']);
         }
+
+        if (isset($event['observer'])) {
+            $this->event->observer($event['observer']);
+        }        
     }
 
     /**

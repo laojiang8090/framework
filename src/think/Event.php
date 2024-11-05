@@ -28,6 +28,12 @@ class Event
     protected $listener = [];
 
     /**
+     * 观察者
+     * @var array
+     */
+    protected $observer = [];
+
+    /**
      * 事件别名
      * @var array
      */
@@ -49,6 +55,35 @@ class Event
     public function __construct(App $app)
     {
         $this->app = $app;
+    }
+
+    /**
+     * 注册事件观察者
+     * @access public
+     * @param string|array $name  观察者标识或批量注册
+     * @param string $observer 观察者定义
+     * @return $this
+     */
+    public function observer(string|array $name, string $observer)
+    {
+        if (is_array($name)) {
+            $this->observer = array_merge($this->observer, $name);
+        } else {
+            $this->observer[$name] = $observer;
+        }
+
+        return $this;
+    }
+
+    /**
+     * 获取对应标识的观察者定义
+     * @access public
+     * @param string $name 观察者标识
+     * @return string|null
+     */
+    public function getObserver(string $name)
+    {
+        return $this->observer[$name] ?? null;
     }
 
     /**
@@ -164,7 +199,7 @@ class Event
     }
 
     /**
-     * 自动注册事件观察者
+     * 自动注册事件监听
      * @access public
      * @param string|object $observer 观察者
      * @param null|string   $prefix   事件名前缀

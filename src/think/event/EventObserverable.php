@@ -10,7 +10,6 @@
 // +----------------------------------------------------------------------
 namespace think\event;
 
-use ReflectionClass;
 use think\Container;
 use think\exception\EventException;
 use think\facade\Event;
@@ -74,20 +73,21 @@ trait EventObserverable
             return true;
         }
 
+        if (str_contains($event, '.')) {
+            [$name, $event] = explode('.', $event, 2);
+            $observer  = Event::getObserver($name);
+            $eventName = $name . '.' . $event;
+        } else {
+            $observer  = $this->eventObserver ?: static::class;
+        }
+
         $call = 'on' . Str::studly($event);
 
         try {
-            if ($this->eventObserver) {
-                $reflect  = new ReflectionClass($this->eventObserver);
-                $observer = $reflect->newinstance();
-            } else {
-                $observer = static::class;
-            }
-
-            if (method_exists($observer, $call)) {
+            if ($observer && method_exists($observer, $call)) {
                 $result = Container::getInstance()->invoke([$observer, $call], [$params ?: $this]);
             } else {
-                $result = Event::trigger($event, $params ?: $this);
+                $result = Event::trigger($eventName ?? $event, $params ?: $this);
                 $result = empty($result) ? true : end($result);
             }
 

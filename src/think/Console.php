@@ -24,6 +24,7 @@ use think\console\command\make\Event;
 use think\console\command\make\Listener;
 use think\console\command\make\Middleware;
 use think\console\command\make\Model;
+use think\console\command\make\Observer;
 use think\console\command\make\Service;
 use think\console\command\make\Subscribe;
 use think\console\command\make\Validate;
@@ -67,6 +68,7 @@ class Console
         'make:validate'    => Validate::class,
         'make:event'       => Event::class,
         'make:listener'    => Listener::class,
+        'make:observer'    => Observer::class,
         'make:service'     => Service::class,
         'make:subscribe'   => Subscribe::class,
         'optimize:route'   => Route::class,
