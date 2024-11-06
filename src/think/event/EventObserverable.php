@@ -8,6 +8,8 @@
 // +----------------------------------------------------------------------
 // | Author: yunwuxin <448901948@qq.com>
 // +----------------------------------------------------------------------
+declare (strict_types = 1);
+
 namespace think\event;
 
 use think\Container;
@@ -73,21 +75,14 @@ trait EventObserverable
             return true;
         }
 
-        if (str_contains($event, '.')) {
-            [$name, $event] = explode('.', $event, 2);
-            $observer  = Event::getObserver($name);
-            $eventName = $name . '.' . $event;
-        } else {
-            $observer  = $this->eventObserver ?: static::class;
-        }
-
-        $call = 'on' . Str::studly($event);
+        $observer = $this->eventObserver ?: static::class;
+        $call     = 'on' . Str::studly($event);
 
         try {
-            if ($observer && method_exists($observer, $call)) {
+            if (method_exists($observer, $call)) {
                 $result = Container::getInstance()->invoke([$observer, $call], [$params ?: $this]);
             } else {
-                $result = Event::trigger($eventName ?? $event, $params ?: $this);
+                $result = Event::trigger($event, $params ?: $this);
                 $result = empty($result) ? true : end($result);
             }
 

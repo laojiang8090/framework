@@ -8,12 +8,13 @@
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace think;
 
 use ReflectionClass;
 use ReflectionMethod;
+use think\helper\Str;
 
 /**
  * 事件管理类
@@ -64,7 +65,7 @@ class Event
      * @param string $observer 观察者定义
      * @return $this
      */
-    public function observer(string|array $name, ?string $observer = null)
+    public function observer(string | array $name, ?string $observer = null)
     {
         if (is_array($name)) {
             $this->observer = array_merge($this->observer, $name);
@@ -254,6 +255,14 @@ class Event
 
         if (str_contains($event, '.')) {
             [$prefix, $event] = explode('.', $event, 2);
+            if (isset($this->observer[$prefix])) {
+                // 检查观察者事件响应方法
+                $observer = $this->observer[$prefix];
+                $method   = 'on' . Str::studly($event);
+                if (method_exists($observer, $method)) {
+                    return $this->dispatch([$observer, $method], $params);
+                }
+            }
             if (isset($this->listener[$prefix . '.*'])) {
                 $listeners = array_merge($listeners, $this->listener[$prefix . '.*']);
             }
