@@ -59,35 +59,6 @@ class Event
     }
 
     /**
-     * 注册事件观察者
-     * @access public
-     * @param string|array $name  观察者标识或批量注册
-     * @param string $observer 观察者定义
-     * @return $this
-     */
-    public function observer(string | array $name, ?string $observer = null)
-    {
-        if (is_array($name)) {
-            $this->observer = array_merge($this->observer, $name);
-        } else {
-            $this->observer[$name] = $observer;
-        }
-
-        return $this;
-    }
-
-    /**
-     * 获取对应标识的观察者定义
-     * @access public
-     * @param string $name 观察者标识
-     * @return string|null
-     */
-    public function getObserver(string $name)
-    {
-        return $this->observer[$name] ?? null;
-    }
-
-    /**
      * 批量注册事件监听
      * @access public
      * @param array $events 事件定义
@@ -182,7 +153,7 @@ class Event
     {
         $subscribers = (array) $subscriber;
 
-        foreach ($subscribers as $subscriber) {
+        foreach ($subscribers as $name => $subscriber) {
             if (is_string($subscriber)) {
                 $subscriber = $this->app->make($subscriber);
             }
@@ -190,6 +161,9 @@ class Event
             if (method_exists($subscriber, 'subscribe')) {
                 // 手动订阅
                 $subscriber->subscribe($this);
+            } elseif (!is_numeric($name)) {
+                // 注册观察者
+                $this->observer[$name] = $subscriber;
             } else {
                 // 智能订阅
                 $this->observe($subscriber);
@@ -263,6 +237,7 @@ class Event
                     return $this->dispatch([$observer, $method], $params);
                 }
             }
+
             if (isset($this->listener[$prefix . '.*'])) {
                 $listeners = array_merge($listeners, $this->listener[$prefix . '.*']);
             }
