@@ -102,7 +102,7 @@ class ValidateTest extends TestCase
 
         $this->assertFalse($result);
         $this->assertEquals('accept must be no,off,false or 0', $validate->getError());
-        $this->assertEquals(['accept' => 'accept must be no,off,false or 0'], $validate->getError());
+        $this->assertEquals(['accept' => 'accept must be no,off,false or 0'], $validate->getError(true));
     }
 
     public function testMultipleOf()
