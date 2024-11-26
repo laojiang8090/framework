@@ -26,10 +26,26 @@ class Callback extends Dispatch
             [$class, $action] = $this->dispatch;
 
             // 设置当前请求的控制器、操作
-            $controllerLayer      = $this->rule->config('controller_layer') ?: 'controller';
-            [$layer, $controller] = explode('/' . $controllerLayer . '/', trim(str_replace('\\', '/', $class), '/'));
+            $controllerLayer = $this->rule->config('controller_layer') ?: 'controller';
+            if (str_contains($class, '\\' . $controllerLayer . '\\')) {
+                [$layer, $controller] = explode('/' . $controllerLayer . '/', trim(str_replace('\\', '/', $class), '/'));
+                $layer                = trim(str_replace('app', '', $layer), '/');
+            } else {
+                $layer      = '';
+                $controller = trim(str_replace('\\', '/', $class), '/');
+            }
+
+            if ($layer && !empty($this->option['auto_middleware'])) {
+                // 自动为顶层layer注册中间件
+                $alias = $this->app->config->get('middleware.alias', []);
+
+                if (isset($alias[$layer])) {
+                    $this->app->middleware->add($layer, 'route');
+                }
+            }
+
             $this->request
-                ->setLayer(trim(str_replace('app', '', $layer), '/'))
+                ->setLayer($layer)
                 ->setController($controller)
                 ->setAction($action);
 
