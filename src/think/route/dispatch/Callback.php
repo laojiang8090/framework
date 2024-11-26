@@ -12,6 +12,7 @@ declare (strict_types = 1);
 
 namespace think\route\dispatch;
 
+use think\exception\ClassNotFoundException;
 use think\route\Dispatch;
 
 /**
@@ -49,7 +50,12 @@ class Callback extends Dispatch
                 ->setController($controller)
                 ->setAction($action);
 
-            $instance = $this->app->invokeClass($class);
+            if (class_exists($class)) {
+                $instance = $this->app->invokeClass($class);
+            } else {
+                throw new ClassNotFoundException('class not exists:' . $class, $class);
+            }
+
             return $this->responseWithMiddlewarePipeline($instance, $action);
         }
 
