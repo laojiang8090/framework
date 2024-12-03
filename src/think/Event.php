@@ -151,7 +151,7 @@ class Event
      */
     public function subscribe($subscriber)
     {
-        $subscribers = (array) $subscriber;
+        $subscribers = is_object($subscriber) ? [$subscriber] : (array) $subscriber;
 
         foreach ($subscribers as $name => $subscriber) {
             if (is_string($subscriber)) {
@@ -228,18 +228,19 @@ class Event
         $listeners = $this->listener[$event] ?? [];
 
         if (str_contains($event, '.')) {
-            [$prefix, $event] = explode('.', $event, 2);
+            [$prefix, $name] = explode('.', $event, 2);
             if (isset($this->observer[$prefix])) {
                 // 检查观察者事件响应方法
                 $observer = $this->observer[$prefix];
-                $method   = 'on' . Str::studly($event);
+                $method   = 'on' . Str::studly($name);
                 if (method_exists($observer, $method)) {
                     return $this->dispatch([$observer, $method], $params);
                 }
             }
 
-            if (isset($this->listener[$prefix . '.*'])) {
-                $listeners = array_merge($listeners, $this->listener[$prefix . '.*']);
+            $name = strrchr($event, '.', true);
+            if (isset($this->listener[$name . '.*'])) {
+                $listeners = array_merge($listeners, $this->listener[$name . '.*']);
             }
         }
 
