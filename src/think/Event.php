@@ -238,7 +238,7 @@ class Event
                 }
             }
 
-            $name = strrchr($event, '.', true);
+            $name = substr($event, 0, strrpos($event, '.'));
             if (isset($this->listener[$name . '.*'])) {
                 $listeners = array_merge($listeners, $this->listener[$name . '.*']);
             }
